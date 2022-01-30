@@ -11,21 +11,21 @@ namespace MeetingManager
     {
         public enum Category
         {
-            CodeMonkey,
-            Hub,
-            Short,
-            TeamBuilding
+            CodeMonkey = 1,
+            Hub = 2,
+            Short = 3,
+            TeamBuilding = 4
         }
         public enum Type
         {
-            Live,
-            InPerson
+            Live = 1,
+            InPerson = 2
         }
         public string? name { get; set; }
         public string? responsiblePerson { get; set; }
         public string? description { get; set; }
-        public string? category { get; set; }
-        public string? type { get; set; }
+        public string? category { get; set; } = null;
+        public string? type { get; set; } = null;
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
         public List<String>? attendees { get; set; } = new List<String>();
@@ -43,11 +43,47 @@ namespace MeetingManager
             Console.WriteLine("Enter description.");
             meeting.description = Console.ReadLine();
 
-            Console.WriteLine("Enter category.");
-            meeting.category = Console.ReadLine();
+            Console.WriteLine("Select category.");
+            while (meeting.category == null)
+            {
+                int index = 1;
+                int input;
+                foreach(var cat in Enum.GetValues(typeof(Category)))
+                {
+                    Console.WriteLine($"{index}. {cat}");
+                    index++;
+                }
+                input = int.Parse(Console.ReadLine());
+                if (Enum.IsDefined((Category)input))
+                {
+                    meeting.category = ((Category)input).ToString();
+                }
+                else
+                {
+                    Console.WriteLine("Index out of bounds.");
+                }
+            }
 
-            Console.WriteLine("Enter type.");
-            meeting.type = Console.ReadLine();
+            Console.WriteLine("Select type.");
+            while (meeting.type == null)
+            {
+                int index = 1;
+                int input;
+                foreach (var meetType in Enum.GetValues(typeof(Type)))
+                {
+                    Console.WriteLine($"{index}. {meetType}");
+                    index++;
+                }
+                input = int.Parse(Console.ReadLine());
+                if (Enum.IsDefined((Type)input))
+                {
+                    meeting.type = ((Type)input).ToString();
+                }
+                else
+                {
+                    Console.WriteLine("Index out of bounds.");
+                }
+            }
 
             Console.WriteLine("Enter start date.");
             string line = Console.ReadLine();

@@ -86,7 +86,7 @@ namespace MeetingManager
                     break;
                 case "3":
                 break;
-                    Console.WriteLine("Enter category.");
+                    Console.WriteLine("Select category.");
                     searchKey = Console.ReadLine();
                     filteredList = meetingList.FindAll(o => o.category.Contains(searchKey));
                     foreach (var oneMeeting in filteredList)
@@ -94,7 +94,7 @@ namespace MeetingManager
                         Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(oneMeeting));
                     }
                 case "4":
-                    Console.WriteLine("Enter type.");
+                    Console.WriteLine("Select type.");
                     searchKey = Console.ReadLine();
                     filteredList = meetingList.FindAll(o => o.type.Contains(searchKey));
                     foreach (var oneMeeting in filteredList)
@@ -172,9 +172,34 @@ namespace MeetingManager
             Console.WriteLine("Write names of people to add one by one or write exit to finish adding people.\n");
             while ((answer = Console.ReadLine()).ToLower() != "Exit".ToLower())
             {
+                bool addToMeeting = false;
+                List<Meeting> filteredList = new List<Meeting>();
+                filteredList = meetingList.FindAll(o => o.attendees.Contains(answer))
+                    .FindAll(o => (o.startDate <= meetingList[toAdd - 1].startDate && o.endDate > meetingList[toAdd - 1].startDate) ||
+                    (o.startDate < meetingList[toAdd - 1].endDate && o.endDate >= meetingList[toAdd - 1].endDate) ||
+                    (o.startDate >= meetingList[toAdd - 1].startDate && o.endDate <= meetingList[toAdd - 1].endDate));
                 if (meetingList[toAdd - 1].attendees.Contains(answer))
                 {
                     Console.WriteLine("This person is already in the meeting.");
+                }
+                else if(filteredList.Count != 0){
+                    Console.WriteLine("This person is in another meeting with an intersecting time do you want to continue? Y/N");
+                    string input = Console.ReadLine();
+                    if(input.ToLower() == "Y".ToLower())
+                    {
+                        meetingList[toAdd - 1].attendees.Add(answer);
+                        string jsonWrite = Newtonsoft.Json.JsonConvert.SerializeObject(meetingList);
+                        File.WriteAllText($"{Environment.CurrentDirectory}/meetingList/meetingList.Json", jsonWrite);
+                    }
+                    else if(input.ToLower() == "N".ToLower())
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong command.");
+                        Console.WriteLine("Write name of person to add.");
+                    }
                 }
                 else
                 {

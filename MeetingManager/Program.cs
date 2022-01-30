@@ -19,6 +19,7 @@ namespace MeetingManager
 
             do
             {
+                Console.Clear();
                 answer = controller.AwaitCommand(user);
                 Console.WriteLine(answer);
             }while (answer != "Exit");
