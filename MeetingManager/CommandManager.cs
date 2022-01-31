@@ -17,6 +17,7 @@ namespace MeetingManager
         {
             if (!File.Exists($"{Environment.CurrentDirectory}/meetingList/meetingList.Json"))
             {
+                Directory.CreateDirectory($"{Environment.CurrentDirectory}/meetingList");
                 using (FileStream fs = File.Create($"{Environment.CurrentDirectory}/meetingList/meetingList.Json"))
                 {
                     byte[] info = new UTF8Encoding(true).GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(new List<Meeting>()));
@@ -37,7 +38,7 @@ namespace MeetingManager
             switch (consoleWrapper.ReadLine())
             {
                 case "1":
-                    Meeting meeting = new Meeting(consoleWrapper);
+                    Meeting meeting = new(consoleWrapper);
                     meeting.CreateMeeting();
                     meetingList.Add(meeting);
                     string jsonWrite = Newtonsoft.Json.JsonConvert.SerializeObject(meetingList);

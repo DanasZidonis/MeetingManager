@@ -14,6 +14,7 @@ namespace MeetingTester
         {
             if (!File.Exists($"{Environment.CurrentDirectory}/MeetingList/meetingList.Json"))
             {
+                Directory.CreateDirectory($"{Environment.CurrentDirectory}/meetingList");
                 using (FileStream fs = File.Create($"{Environment.CurrentDirectory}/MeetingList/meetingList.Json"))
                 {
                     byte[] info = new UTF8Encoding(true).GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(new List<Meeting>()));
@@ -199,7 +200,7 @@ namespace MeetingTester
             CommandManager commandManager = new(consoleWrapper);
             string jsonRead = File.ReadAllText($"{Environment.CurrentDirectory}/MeetingList/meetingList.Json");
             List<Meeting> meetingList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Meeting>>(jsonRead);
-            User user = new User();
+            User user = new();
             user.Name("testPerson5");
             var filteredList = commandManager.DeleteMeeting(meetingList, user);
             Console.WriteLine(filteredList);
@@ -231,7 +232,7 @@ namespace MeetingTester
             CommandManager commandManager = new(consoleWrapper);
             string jsonRead = File.ReadAllText($"{Environment.CurrentDirectory}/MeetingList/meetingList.Json");
             List<Meeting> meetingList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Meeting>>(jsonRead);
-            User user = new User();
+            User user = new();
             user.Name("testPerson4");
             var filteredList = commandManager.DeleteMeeting(meetingList, user);
             Console.WriteLine(filteredList);
