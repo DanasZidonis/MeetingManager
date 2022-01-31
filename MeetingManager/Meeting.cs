@@ -9,106 +9,106 @@ namespace MeetingManager
 {
     public class Meeting
     {
-        public enum Category
+        private readonly IConsole consoleWrapper;
+        public Meeting(IConsole changedWrapper)
+        {
+            consoleWrapper = changedWrapper;
+        }
+        public enum CategoryEnum
         {
             CodeMonkey = 1,
             Hub = 2,
             Short = 3,
             TeamBuilding = 4
         }
-        public enum Type
+        public enum TypeEnum
         {
             Live = 1,
             InPerson = 2
         }
-        public string? name { get; set; }
-        public string? responsiblePerson { get; set; }
-        public string? description { get; set; }
-        public string? category { get; set; } = null;
-        public string? type { get; set; } = null;
-        public DateTime? startDate { get; set; }
-        public DateTime? endDate { get; set; }
-        public List<String>? attendees { get; set; } = new List<String>();
+        public string? Name { get; set; }
+        public string? ResponsiblePerson { get; set; }
+        public string? Description { get; set; }
+        public string? Category { get; set; } = null;
+        public string? Type { get; set; } = null;
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public List<String>? Attendees { get; set; } = new List<String>();
 
-        public static Meeting CreateMeeting()
+        public Meeting CreateMeeting()
         {
-            Meeting meeting = new Meeting();
+            consoleWrapper.WriteLine("Enter meeting name.");
+            Name = consoleWrapper.ReadLine();
 
-            Console.WriteLine("Enter meeting name.");
-            meeting.name = Console.ReadLine();
+            consoleWrapper.WriteLine("Enter responsible person.");
+            ResponsiblePerson = consoleWrapper.ReadLine();
 
-            Console.WriteLine("Enter responsible person.");
-            meeting.responsiblePerson = Console.ReadLine();
+            consoleWrapper.WriteLine("Enter description.");
+            Description = consoleWrapper.ReadLine();
 
-            Console.WriteLine("Enter description.");
-            meeting.description = Console.ReadLine();
-
-            Console.WriteLine("Select category.");
-            while (meeting.category == null)
+            consoleWrapper.WriteLine("Select category.");
+            while (Category == null)
             {
                 int index = 1;
                 int input;
-                foreach(var cat in Enum.GetValues(typeof(Category)))
+                foreach(var cat in Enum.GetValues(typeof(CategoryEnum)))
                 {
-                    Console.WriteLine($"{index}. {cat}");
+                    consoleWrapper.WriteLine($"{index}. {cat}");
                     index++;
                 }
-                input = int.Parse(Console.ReadLine());
-                if (Enum.IsDefined((Category)input))
+                input = int.Parse(consoleWrapper.ReadLine());
+                if (Enum.IsDefined((CategoryEnum)input))
                 {
-                    meeting.category = ((Category)input).ToString();
+                    Category = ((CategoryEnum)input).ToString();
                 }
                 else
                 {
-                    Console.WriteLine("Index out of bounds.");
+                    consoleWrapper.WriteLine("Index out of bounds.");
                 }
             }
 
-            Console.WriteLine("Select type.");
-            while (meeting.type == null)
+            consoleWrapper.WriteLine("Select type.");
+            while (Type == null)
             {
                 int index = 1;
                 int input;
-                foreach (var meetType in Enum.GetValues(typeof(Type)))
+                foreach (var meetType in Enum.GetValues(typeof(TypeEnum)))
                 {
-                    Console.WriteLine($"{index}. {meetType}");
+                    consoleWrapper.WriteLine($"{index}. {meetType}");
                     index++;
                 }
-                input = int.Parse(Console.ReadLine());
-                if (Enum.IsDefined((Type)input))
+                input = int.Parse(consoleWrapper.ReadLine());
+                if (Enum.IsDefined((TypeEnum)input))
                 {
-                    meeting.type = ((Type)input).ToString();
+                    Type = ((TypeEnum)input).ToString();
                 }
                 else
                 {
-                    Console.WriteLine("Index out of bounds.");
+                    consoleWrapper.WriteLine("Index out of bounds.");
                 }
             }
 
-            Console.WriteLine("Enter start date.");
-            string line = Console.ReadLine();
+            consoleWrapper.WriteLine("Enter start date.");
+            string line = consoleWrapper.ReadLine();
             DateTime dt;
             while (!DateTime.TryParseExact(line, "yyyy-MM-dd:HH:m", null, System.Globalization.DateTimeStyles.None, out dt))
             {
-                Console.WriteLine("Invalid date, please retry");
-                line = Console.ReadLine();
+                consoleWrapper.WriteLine("Invalid date, please retry");
+                line = consoleWrapper.ReadLine();
             }
-            meeting.startDate = dt;
+            StartDate = dt;
 
-            Console.WriteLine("Enter end date.");
-            string line2 = Console.ReadLine();
+            consoleWrapper.WriteLine("Enter end date.");
+            string line2 = consoleWrapper.ReadLine();
             DateTime dt2;
             while (!DateTime.TryParseExact(line2, "yyyy-MM-dd:HH:m", null, System.Globalization.DateTimeStyles.None, out dt2))
             {
-                Console.WriteLine("Invalid date, please retry");
-                line2 = Console.ReadLine();
+                consoleWrapper.WriteLine("Invalid date, please retry");
+                line2 = consoleWrapper.ReadLine();
             }
-            meeting.endDate = dt2;
+            EndDate = dt2;
 
-            //string json = Newtonsoft.Json.JsonConvert.SerializeObject(meeting);
-            //File.WriteAllText($"{Environment.CurrentDirectory}/meetingList/meetingList.Json", json);
-
-            return meeting;
+            return this;
         }
     }
 }
